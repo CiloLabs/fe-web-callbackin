@@ -1,8 +1,29 @@
+import {Route, Routes} from 'react-router-dom';
+import {allRoute} from './routes';
+
+import UnmatchPage from './pages/UnmatchPage';
+
 function App() {
   return (
-    <div className="w-full min-h-screen flex justify-center items-center">
-      <h1>Hello, World :)</h1>
-    </div>
+    <Routes>
+      {allRoute.map((item, key) =>
+        item.children ? (
+          <Route key={key} path="/" element={<item.component />}>
+            {item.children.map((child, keyChild) => (
+              <Route
+                key={keyChild}
+                element={<child.component />}
+                path={child.path}
+              />
+            ))}
+          </Route>
+        ) : (
+          <Route key={key} element={<item.component />} path={item.path} />
+        ),
+      )}
+
+      <Route path="*" element={<UnmatchPage />} />
+    </Routes>
   );
 }
 
